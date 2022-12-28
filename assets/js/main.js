@@ -1,7 +1,12 @@
 (function($) {
-  $(document).on("click", "#simulate_button", function() {
+  $(document).on("click", "#fake_simulate_button", function() {
     $("#loading_indicator").css("display", "flex");
+    setTimeout(function() {
+      $("#simulate_button").click();
+    }, 1);
+  });
 
+  $(document).on("click", "#simulate_button", function() {
     var deckInputString = $("#deck_input").val();
 
     var deck = manaBaseTextToDeck(deckInputString);
@@ -16,9 +21,10 @@
     }
     // Render results
     for (var i = 0; i < results.length; i++) {
-      var height = (results[i] / maxResult) * 80;
+      var height = (results[i] / 10000) * 100;
       $("#bar_graph_column_" + i).css("height", height + "%");
+      $("#bar_graph_column_labels_" + i).html(results[i]);
     }
     $("#loading_indicator").css("display", "none");
-  })
+  });
 })(jQuery);

@@ -27,18 +27,41 @@
         </div>
         <label for="deck_input">Input your mana base below:</label>
         <div class="mb-4">
-          <textarea id="deck_input" name="deck_input" class="textarea">colors=ub behavior=basic fetchable count=7</textarea>
+          <textarea id="deck_input" name="deck_input" class="textarea">
+colors=b behavior=basic fetchable count=7
+colors=r behavior=basic fetchable count=7
+colors=g behavior=basic fetchable count=7
+Geothermal Bog: colors=br fetchable enterTapped
+Wooded Ridgeline: colors=rg fetchable enterTapped
+Haunted Mire: colors=gb fetchable enterTapped
+Bloodstained Mire: colors=br behavior=fetchland
+Wooded Foothills: colors=rg behavior=fetchland
+Verdant Catacombs: colors=gb behavior=fetchland</textarea>
         </div>
         <div class="mb-3">
           <label for="mana_cost">Mana Cost</label>
-          <input class="input" id="mana_cost" name="mana_cost" value="1UB">
+          <input class="input" id="mana_cost" name="mana_cost" value="1BRG">
         </div>
-        <div class="button" id="simulate_button">
+        <div class="button" id="fake_simulate_button">
           Simulate!
         </div>
+        <div class="hidden" id="simulate_button"></div>
 
         <h3>Results:</h3>
-        <div id="results_bar_graph" class="mt-4">
+        <div class="results-bar-graph-labels mt-4">
+          <div class="bar-graph-column-label">Turn 1</div>
+          <div class="bar-graph-column-label">Turn 2</div>
+          <div class="bar-graph-column-label">Turn 3</div>
+          <div class="bar-graph-column-label">Turn 4</div>
+          <div class="bar-graph-column-label">Turn 5</div>
+          <div class="bar-graph-column-label">Turn 6</div>
+          <div class="bar-graph-column-label">Turn 7</div>
+          <div class="bar-graph-column-label">Turn 8</div>
+          <div class="bar-graph-column-label">Turn 9</div>
+          <div class="bar-graph-column-label">Turn 10</div>
+          <div class="bar-graph-column-label">Failed</div>
+        </div>
+        <div id="results_bar_graph" class="mt-2">
           <div id="bar_graph_column_0" class="bar-graph-column"></div>
           <div id="bar_graph_column_1" class="bar-graph-column"></div>
           <div id="bar_graph_column_2" class="bar-graph-column"></div>
@@ -53,6 +76,19 @@
           <div id="loading_indicator" class="is-align-items-center is-justify-content-space-around">
             <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
           </div>
+        </div>
+        <div class="results-bar-graph-labels">
+          <div id="bar_graph_column_labels_0" class="bar-graph-column-label"></div>
+          <div id="bar_graph_column_labels_1" class="bar-graph-column-label"></div>
+          <div id="bar_graph_column_labels_2" class="bar-graph-column-label"></div>
+          <div id="bar_graph_column_labels_3" class="bar-graph-column-label"></div>
+          <div id="bar_graph_column_labels_4" class="bar-graph-column-label"></div>
+          <div id="bar_graph_column_labels_5" class="bar-graph-column-label"></div>
+          <div id="bar_graph_column_labels_6" class="bar-graph-column-label"></div>
+          <div id="bar_graph_column_labels_7" class="bar-graph-column-label"></div>
+          <div id="bar_graph_column_labels_8" class="bar-graph-column-label"></div>
+          <div id="bar_graph_column_labels_9" class="bar-graph-column-label"></div>
+          <div id="bar_graph_column_labels_10" class="bar-graph-column-label"></div>
         </div>
         <div class="mt-6"><br></div>
       </div>

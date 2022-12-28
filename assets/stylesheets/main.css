@@ -3,7 +3,7 @@
 
 body {
   background-color: #f7f7f7;
-  height: 100vh;
+  height: 100%;
 }
 
 .full-height { height: 100%; }
@@ -34,6 +34,20 @@ body {
 
 .bar-graph-column.missed-cycles-column {
   background-color: red;
+}
+
+.results-bar-graph-labels {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  position: relative;
+}
+
+.bar-graph-column-label {
+  width: 7%;
+  text-align: center;
+
+  transition: height 0.5s;
 }
 
 #loading_indicator {

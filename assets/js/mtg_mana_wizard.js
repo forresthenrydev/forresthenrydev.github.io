@@ -56,13 +56,21 @@ function simulateManaBase(deck, targetManaCost) {
 
       // Find a card with the best castability
       var bestIndex = -1,
-          bestScore = 10000;
+          bestScore = 10000,
+          virtualBattlefield = JSON.parse(JSON.stringify(battlefield));
       for (var i = 0; i < hand.length; i++) {
         var landInHand = hand[i],
-            virtualBattlefield = JSON.parse(JSON.stringify(battlefield));
-        virtualBattlefield.push(landInHand);
+            scoreForThisLand;
 
-        var scoreForThisLand = castabilityScore(targetManaCost, virtualBattlefield);
+        if (landInHand.behavior == "fetchland") {
+          scoreForThisLand = fetchlandCastabilityScore(landInHand, targetManaCost, currentDeck, battlefield);
+        } else {
+          virtualBattlefield.push(landInHand);
+          scoreForThisLand = castabilityScore(targetManaCost, virtualBattlefield);
+          virtualBattlefield.pop();
+        }
+
+        if (landInHand.enterTapped) { scoreForThisLand++; }
 
         if (scoreForThisLand < bestScore) {
           bestScore = scoreForThisLand;
@@ -71,13 +79,19 @@ function simulateManaBase(deck, targetManaCost) {
       }
 
       // Play that land
-      var landToPlay = hand.splice(bestIndex, 1)[0];
+      var landToPlay = hand.splice(bestIndex, 1)[0],
+          playedLand = false;
       if (!landToPlay.enterTapped) {
+        if (landToPlay.behavior == "fetchland") {
+          landToPlay = currentDeck.splice(landToPlay.landToFetchIndex, 1)[0]
+        }
         battlefield.push(landToPlay);
+        playedLand = true;
       }
+      //if (battlefield.length !== turnNum + 1) { debugger }
 
       // Check if we met our castability score
-      //if (castabilityScore(targetManaCost, battlefield) === 0 && battlefield.length === 2) { debugger }
+      //if (castabilityScore(targetManaCost, battlefield) === 0 && turnNum === 2) { debugger }
       if (castabilityScore(targetManaCost, battlefield) === 0) {
         turnsToCasts[turnNum]++;
         break;
@@ -87,7 +101,10 @@ function simulateManaBase(deck, targetManaCost) {
       }
 
       // Play the land "late" if it enters tapped
-      if (landToPlay.enterTapped) {
+      if (!playedLand) {
+        if (landToPlay.behavior == "fetchland") {
+          landToPlay = currentDeck.splice(landToPlay.landToFetchIndex, 1)[0]
+        }
         battlefield.push(landToPlay);
       }
     }
@@ -96,6 +113,34 @@ function simulateManaBase(deck, targetManaCost) {
   console.log("Simulation finished");
   console.log(turnsToCasts);
   return turnsToCasts;
+}
+
+// Calculate the theoretical castability of a fetchland
+// Set landToFetchIndex for landInHand as a side-effect
+function fetchlandCastabilityScore(landInHand, targetManaCost, currentDeck, battlefield) {
+  var bestIndex = -1,
+      bestScore = 1000,
+      virtualBattlefield = JSON.parse(JSON.stringify(battlefield));
+  for (var i = 0; i < currentDeck.length; i++) {
+    var landInDeck = currentDeck[i];
+
+    // Skip unfetchable lands
+    if (!landInDeck.fetchable) continue;
+    // Skip lands that share no colors with this fetchland
+    if (landInHand.colors.filter(color => landInDeck.colors.includes(color)).length === 0) continue;
+
+    virtualBattlefield.push(landInDeck);
+    scoreForThisLand = castabilityScore(targetManaCost, virtualBattlefield);
+    virtualBattlefield.pop();
+
+    if (scoreForThisLand < bestScore) {
+      bestIndex = i;
+      bestScore = scoreForThisLand;
+    }
+  }
+
+  landInHand.landToFetchIndex = bestIndex;
+  return bestScore;
 }
 
 // Calculate the "castability" of a given mana cost. If the cost can be payed, the score is zero.
@@ -172,12 +217,22 @@ function manaBaseTextToDeck(text) {
 
   // Iterate lines in text
   cardTexts.forEach(cardText => {
-    var valueStrings = cardText.split(" "),
+    var parseText, name;
+    if (cardText.includes(":")) {
+      var parts = cardText.split(":");
+      name = parts[0].trim();
+      parseText = parts[1].trim();
+    } else {
+      parseText = cardText.trim();
+    }
+
+    var valueStrings = parseText.split(" "),
         count = 1,
         card = {
           colors: [],
           enterTapped: false,
-          fetchable: false
+          fetchable: false,
+          name: name
         };
 
     // Iterate values for each line

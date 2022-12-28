@@ -1,4 +1,5 @@
 @import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
+@import "./spinner.css";
 
 body {
   background-color: #f7f7f7;
@@ -6,7 +7,43 @@ body {
 }
 
 .full-height { height: 100%; }
+.full-width { width: 100%; }
 
 .main-content {
   background-color: white;
+}
+
+#results_bar_graph {
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  background-color: #e6e6e6;
+  justify-content: space-around;
+  position: relative;
+
+  height: 300px;
+}
+
+.bar-graph-column {
+  background-color: #21d10d;
+  border-radius: 5px 5px 0 0;
+  width: 7%;
+
+  transition: height 0.5s;
+}
+
+.bar-graph-column.missed-cycles-column {
+  background-color: red;
+}
+
+#loading_indicator {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #0000003a;
+  display: none;
+}
+
+#loading_indicator.visible {
+  display: flex;
 }

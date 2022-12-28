@@ -10,14 +10,51 @@
     <div class="container full-height is-max-desktop">
       <div class="main-content full-height content px-5 py-6">
         <h1>MTG Mana Wizard</h1>
-        <div class="block">This is text explaining what the code does. Wow it's so very descriptive</div>
+        <div class="block">
+          This is a fairly basic simulation of a mana base in a Magic: The Gathering deck. Input your deck's mana base and a Mana Value
+          in the fields below, and the program will simulate thousands of games of your deck and output the results of how many turns
+          it takes to be able to spend that CMC.
+          <br>
+          The simulator will construct a deck of pure lands, draw two before the game, then draw one per turn. The land
+          to play is chosen based on which will bring us the closest to being able to spend the given mana value.
+          <br>
+          <br>
+          <strong>SHORTCOMINGS:</strong> As this is a simple simulation, there are a number of differences from a normal game
+          that should be taken into account. For example, the simulator assumes that you will hit your land drop every turn.
+          More importantly, ramp spells (such as Rampant Growth or any mana rock) are not considered.
+          <br>
+          That being said, this should be an adequeate tool for comparing one mana base to another.
+        </div>
         <label for="deck_input">Input your mana base below:</label>
         <div class="mb-4">
           <textarea id="deck_input" name="deck_input" class="textarea">colors=ub behavior=basic fetchable count=7</textarea>
         </div>
+        <div class="mb-3">
+          <label for="mana_cost">Mana Cost</label>
+          <input class="input" id="mana_cost" name="mana_cost" value="1UB">
+        </div>
         <div class="button" id="simulate_button">
           Simulate!
         </div>
+
+        <h3>Results:</h3>
+        <div id="results_bar_graph" class="mt-4">
+          <div id="bar_graph_column_0" class="bar-graph-column"></div>
+          <div id="bar_graph_column_1" class="bar-graph-column"></div>
+          <div id="bar_graph_column_2" class="bar-graph-column"></div>
+          <div id="bar_graph_column_3" class="bar-graph-column"></div>
+          <div id="bar_graph_column_4" class="bar-graph-column"></div>
+          <div id="bar_graph_column_5" class="bar-graph-column"></div>
+          <div id="bar_graph_column_6" class="bar-graph-column"></div>
+          <div id="bar_graph_column_7" class="bar-graph-column"></div>
+          <div id="bar_graph_column_8" class="bar-graph-column"></div>
+          <div id="bar_graph_column_9" class="bar-graph-column"></div>
+          <div id="bar_graph_column_10" class="bar-graph-column missed-cycles-column"></div>
+          <div id="loading_indicator" class="is-align-items-center is-justify-content-space-around">
+            <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+          </div>
+        </div>
+        <div class="mt-6"><br></div>
       </div>
     </div>
 
